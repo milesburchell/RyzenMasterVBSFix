@@ -118,6 +118,8 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"NtQueryInformationProcess failed, 0x%X.\n", status);
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
         return -3;
     }
 
@@ -129,6 +131,8 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"ReadProcessMemory[1] failed, %d.\n", GetLastError());
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
         return -4;
     }
 
@@ -143,6 +147,8 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"VirtualAlloc failed, %d.\n", GetLastError());
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
         return -5;
     }
 
@@ -151,6 +157,9 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"ReadProcessMemory[2] failed, %d.\n", GetLastError());
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
+        VirtualFree(buffer, 0, MEM_RELEASE);
         return -6;
     }
 
@@ -161,6 +170,9 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"FindPattern failed.\n");
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
+        VirtualFree(buffer, 0, MEM_RELEASE);
         return -7;
     }
 
@@ -176,13 +188,21 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
     {
         wprintf(L"WriteProcessMemory failed, %d.\n", GetLastError());
         TerminateProcess(processInformation.hProcess, 0);
+        CloseHandle(processInformation.hProcess);
+        CloseHandle(processInformation.hThread);
+        VirtualFree(buffer, 0, MEM_RELEASE);
         return -8;
     }
 
     // Resume process
     ResumeThread(processInformation.hThread);
 
+    // Free buffer
+    VirtualFree(buffer, 0, MEM_RELEASE);
+
     // Close handles
     CloseHandle(processInformation.hProcess);
     CloseHandle(processInformation.hThread);
+
+    return 0;
 }
