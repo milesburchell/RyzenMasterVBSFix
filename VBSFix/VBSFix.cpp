@@ -168,7 +168,7 @@ int wmain(int argc, wchar_t* argv[], wchar_t* envp[])
 
     if (!patternPtr)
     {
-        wprintf(L"FindPattern failed.\n");
+        wprintf(L"FindPattern failed, %zu bytes of memory were read.\n", szBytesRead);
         TerminateProcess(processInformation.hProcess, 0);
         CloseHandle(processInformation.hProcess);
         CloseHandle(processInformation.hThread);
