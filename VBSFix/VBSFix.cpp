@@ -16,13 +16,13 @@ typedef NTSTATUS
         OUT PULONG ReturnLength OPTIONAL
         );
 
-const char* Pattern = "\x39\x7D\x90\x0F\x84\x00\x00\x00\x00\x33\xD2\x48\x8D\x4C\x24\x60";
-const char* Mask = "xxxxx????xxxxxxx";
-#define SearchLength 0x20000
+const char* Pattern = "\x40\x55\x56\x57\x41\x56\x41\x57\x48\x8D\x6C\x24\xC9\x48\x81\xEC\x90\x00\x00\x00\x48\xC7\x45\x07\xFE\xFF\xFF\xFF\x48\x89\x9C\x24";
+const char* Mask = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+#define SearchLength 0x47000
 
-const char* Patch = "\xE9\xE9\x00\x00\x00\x90";
-SIZE_T PatchLen = 0x6;
-QWORD PatchOffset = 0x3;
+const char* Patch = "\xC3\x90";
+SIZE_T PatchLen = 0x2;
+QWORD PatchOffset = 0x0;
 
 LPCWSTR Module = L"AMD Ryzen Master.exe";
 LPCWSTR BackupPath = L"C:\\Program Files\\AMD\\RyzenMaster\\bin\\AMD Ryzen Master.exe";
